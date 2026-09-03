@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rarity &mdash; Hype Tradoors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0B0D;
+  --bg-alt:#101216;
+  --bg-panel:#131519;
+  --bg-panel2:#16191E;
+  --mint:#97FCE4;
+  --mint-dim:#5FBDA8;
+  --amber:#FFB020;
+  --chrome:#B8C2C9;
+  --foam:#F5FEFD;
+  --line:rgba(184,194,201,0.14);
+  --line-bright:rgba(151,252,228,0.28);
+  --muted:rgba(245,254,253,0.5);
+  --red:#FF5A5A;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(151,252,228,0.05), transparent),
+    radial-gradient(ellipse 700px 400px at 90% 10%, rgba(255,176,32,0.04), transparent),
+    var(--bg);
+  color:var(--foam);
+  font-family:'Inter',sans-serif;
+  line-height:1.65;
+  font-size:15px;
+}
+h1,h2,h3{ font-family:'Big Shoulders',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:0.01em; line-height:0.98; }
+a{ color:inherit; text-decoration:none; }
+.mono{ font-family:'JetBrains Mono',monospace; }
+.wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+
+/* ---- circuit trace backdrop (subtle, robotic, NOT chart panels) ---- */
+.circuit-bg{
+  position:fixed; inset:0; z-index:-1; opacity:0.35; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(184,194,201,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,194,201,0.05) 1px, transparent 1px);
+  background-size:42px 42px;
+}
+
+/* ---- ticker ---- */
+.ticker-bar{ background:var(--bg-alt); border-bottom:1px solid var(--line); overflow:hidden; white-space:nowrap; padding:9px 0; }
+.ticker-track{ display:inline-block; padding-left:100%; animation:ticker 30s linear infinite; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.1em; color:var(--amber); font-weight:600; }
+.ticker-track span{ margin:0 20px; color:var(--muted); }
+.ticker-track span.hl{ color:var(--mint); }
+@keyframes ticker{ 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
+
+/* ---- nav ---- */
+nav{ position:sticky; top:0; z-index:50; background:rgba(10,11,13,0.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--line); }
+.nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:15px 28px; max-width:1180px; margin:0 auto; }
+.brand{ display:flex; align-items:center; gap:11px; font-family:'Big Shoulders',sans-serif; font-weight:800; font-size:20px; letter-spacing:0.01em; text-transform:uppercase; }
+.brand .node{
+  width:20px; height:20px; border:1.5px solid var(--mint); border-radius:4px; position:relative; flex-shrink:0;
+  background:rgba(151,252,228,0.06);
+}
+.brand .node::after{ content:""; position:absolute; inset:5px; background:var(--mint); border-radius:1px; box-shadow:0 0 8px 1px rgba(151,252,228,0.8); }
+.nav-links{ display:flex; gap:26px; font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:0.04em; color:var(--muted); }
+.nav-links a{ position:relative; padding:4px 0; }
+.nav-links a:hover{ color:var(--foam); }
+.nav-links a.active{ color:var(--mint); }
+.nav-links a.active::after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:var(--mint); box-shadow:0 0 6px 1px rgba(151,252,228,0.7); }
+@media (max-width:900px){ .nav-links{ display:none; } }
+
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'JetBrains Mono',monospace; font-weight:600; font-size:12.5px; letter-spacing:0.03em;
+  padding:11px 20px; border-radius:3px; border:1px solid var(--line);
+  cursor:pointer; transition:all .15s ease; text-transform:uppercase;
+}
+.btn-primary{ background:var(--mint); color:var(--bg); border:none; }
+.btn-primary:hover{ box-shadow:0 0 24px rgba(151,252,228,0.4); transform:translateY(-1px); }
+.btn-ghost{ color:var(--foam); border-color:var(--line); }
+.btn-ghost:hover{ border-color:var(--mint); color:var(--mint); }
+.btn-amber{ background:var(--amber); color:var(--bg); border:none; }
+.btn-amber:hover{ box-shadow:0 0 24px rgba(255,176,32,0.4); transform:translateY(-1px); }
+
+/* ---- panel with corner brackets (robotic HUD look) ---- */
+.panel{
+  position:relative;
+  background:linear-gradient(155deg, var(--bg-panel2), var(--bg-panel));
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:28px;
+}
+.panel::before, .panel::after,
+.panel .bracket-br, .panel .bracket-bl{ content:""; position:absolute; width:14px; height:14px; pointer-events:none; }
+.panel::before{ top:-1px; left:-1px; border-top:2px solid var(--mint-dim); border-left:2px solid var(--mint-dim); }
+.panel::after{ top:-1px; right:-1px; border-top:2px solid var(--mint-dim); border-right:2px solid var(--mint-dim); }
+.panel .bracket-bl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--mint-dim); border-left:2px solid var(--mint-dim); }
+.panel .bracket-br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--mint-dim); border-right:2px solid var(--mint-dim); }
+
+/* ---- status pill ---- */
+.status-pill{
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700;
+  color:var(--amber); border:1px solid rgba(255,176,32,0.35);
+  padding:8px 16px; border-radius:3px;
+}
+.status-pill .pulse{ width:6px; height:6px; border-radius:50%; background:var(--amber); box-shadow:0 0 7px 2px rgba(255,176,32,0.8); animation:blink 1.4s steps(1) infinite; }
+.status-pill.live{ color:var(--mint); border-color:var(--line-bright); }
+.status-pill.live .pulse{ background:var(--mint); box-shadow:0 0 7px 2px rgba(151,252,228,0.8); }
+@keyframes blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0.25;} }
+
+/* ---- FAQ accordion, robotic style ---- */
+.faq-item{ border:1px solid var(--line); border-radius:4px; margin-bottom:10px; overflow:hidden; background:var(--bg-panel); }
+.faq-item summary{
+  list-style:none; cursor:pointer; padding:18px 22px;
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:600;
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{ content:"+"; color:var(--mint); font-size:18px; transition:transform .2s ease; }
+.faq-item[open] summary::after{ transform:rotate(45deg); }
+.faq-item .faq-body{ padding:0 22px 20px; color:var(--muted); font-size:14px; line-height:1.7; }
+
+/* ---- footer ---- */
+footer{ padding:40px 28px; border-top:1px solid var(--line); }
+.footer-inner{ max-width:1180px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+.footer-links{ display:flex; gap:22px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted); }
+.footer-links a:hover{ color:var(--foam); }
+.footer-note{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); }
+
+.rwrap{ max-width:1000px; margin:0 auto; padding:60px 28px 100px; }
+.page-head{ text-align:center; margin-bottom:50px; }
+.page-head h1{ font-size:clamp(36px,5.5vw,54px); margin-bottom:14px; }
+.page-head p{ color:var(--muted); font-size:15px; max-width:560px; margin:0 auto; }
+
+.method-panel{ padding:30px; margin-bottom:44px; }
+.method-panel p{ color:var(--muted); font-size:14.5px; margin-bottom:14px; }
+.method-panel strong{ color:var(--foam); font-family:'JetBrains Mono',monospace; }
+
+.tier-table{ width:100%; border-collapse:collapse; margin-bottom:50px; }
+.tier-table th{ text-align:left; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding:10px 14px; border-bottom:1px solid var(--line); }
+.tier-table td{ padding:16px 14px; border-bottom:1px solid var(--line); font-size:14px; }
+.tier-table .bar-cell{ width:40%; }
+.bar-track{ height:8px; background:var(--bg); border-radius:4px; overflow:hidden; border:1px solid var(--line); }
+.bar-fill{ height:100%; border-radius:4px; }
+.tt-mythic{ color:var(--amber); font-weight:700; } .bf-mythic{ background:var(--amber); }
+.tt-legendary{ color:var(--mint); font-weight:700; } .bf-legendary{ background:var(--mint); }
+.tt-epic{ color:#8FB8FF; font-weight:700; } .bf-epic{ background:#8FB8FF; }
+.tt-rare{ color:#8FE0B8; font-weight:700; } .bf-rare{ background:#8FE0B8; }
+.tt-common{ color:var(--muted); font-weight:700; } .bf-common{ background:var(--muted); }
+
+.spotlight-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:20px; }
+.spot-card{ padding:20px 16px; text-align:center; }
+.spot-card .layer{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+.spot-card .value{ font-family:'Big Shoulders',sans-serif; font-weight:800; font-size:19px; text-transform:uppercase; margin-bottom:6px; }
+.spot-card .pct{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--amber); }
+@media (max-width:900px){ .spotlight-grid{ grid-template-columns:repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<div class="circuit-bg"></div>
+<div class="ticker-bar"><div class="ticker-track"><span class="hl">MINTING LIVE</span><span>MINT NOW ON OPENSEA</span><span class="hl">HYPEREVM</span><span>6% SECONDARY ROYALTY</span><span class="hl">$TRADOORS</span><span>14 MYTHIC &middot; 63 LEGENDARY &middot; 247 EPIC</span><span class="hl">MINTING LIVE</span><span>MINT NOW ON OPENSEA</span><span class="hl">HYPEREVM</span><span>6% SECONDARY ROYALTY</span><span class="hl">$TRADOORS</span><span>14 MYTHIC &middot; 63 LEGENDARY &middot; 247 EPIC</span></div></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="brand"><span class="node"></span>HYPE TRADOORS</a>
+    <div class="nav-links">
+      <a href="index.html" class="">HOME</a>
+      <a href="gallery.html" class="">GALLERY</a>
+      <a href="reveal.html" class="">REVEAL</a>
+      <a href="rarity.html" class="active">RARITY</a>
+      <a href="docs.html" class="">DOCS</a>
+      <a href="staking.html" class="">STAKING</a>
+      
+    </div>
+    <a class="btn btn-primary" href="https://opensea.io/collection/hypetradoors/overview" target="_blank" rel="noopener">Mint Now</a>
+  </div>
+</nav>
+
+<div class="rwrap">
+  <div class="page-head">
+    <span class="kicker">How Scarcity Was Computed</span>
+    <h1>Rarity</h1>
+    <p>No tier was hand-picked. Every unit's score comes from how rare its own trait stack actually is against the full 3,333.</p>
+  </div>
+
+  <div class="panel method-panel">
+    <span class="bracket-bl"></span><span class="bracket-br"></span>
+    <p><strong>THE METHOD.</strong> Every one of the eight trait layers has its own weighting. A unit's score is the sum of how rare each of its own eight traits is individually, the rarer the trait, the higher its contribution.</p>
+    <p>Units are then ranked by total score and cut into five tiers at fixed points in that ranking, not at round, predictable percentages. The cuts landed where the real distribution put them.</p>
+    <p><strong>NO REVEAL DELAY.</strong> Every trait was generated and verified before mint. Rarity was fixed the moment the collection was built, not adjusted afterward.</p>
+  </div>
+
+  <table class="tier-table">
+    <thead><tr><th>Tier</th><th>Units</th><th>Cut</th><th>Share Of Supply</th></tr></thead>
+    <tbody>
+      <tr><td class="tt-mythic">Mythic</td><td>14</td><td>< 0.4% of supply</td>
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill bf-mythic" style="width:0.6%;"></div></div></td></tr>
+      <tr><td class="tt-legendary">Legendary</td><td>63</td><td>next 1.9%</td>
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill bf-legendary" style="width:2.6%;"></div></div></td></tr>
+      <tr><td class="tt-epic">Epic</td><td>247</td><td>next 7.4%</td>
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill bf-epic" style="width:10.2%;"></div></div></td></tr>
+      <tr><td class="tt-rare">Rare</td><td>576</td><td>next 17.3%</td>
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill bf-rare" style="width:23.7%;"></div></div></td></tr>
+      <tr><td class="tt-common">Common</td><td>2,433</td><td>remaining ~73%</td>
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill bf-common" style="width:100.0%;"></div></div></td></tr>
+      
+    </tbody>
+  </table>
+
+  <div class="page-head" style="margin-bottom:30px;">
+    <span class="kicker">Layer Spotlight</span>
+    <h2 style="font-size:28px;">The Rarest Value In Each Layer</h2>
+  </div>
+  <div class="spotlight-grid">
+    <div class="panel spot-card"><span class="bracket-bl"></span><span class="bracket-br"></span>
+      <div class="layer">Headwear</div><div class="value">Crown</div><div class="pct">8 / 3,333 · 0.24%</div></div>
+      <div class="panel spot-card"><span class="bracket-bl"></span><span class="bracket-br"></span>
+      <div class="layer">Eyes</div><div class="value">Void Black</div><div class="pct">13 / 3,333 · 0.39%</div></div>
+      <div class="panel spot-card"><span class="bracket-bl"></span><span class="bracket-br"></span>
+      <div class="layer">Eyewear</div><div class="value">VR Headset</div><div class="pct">23 / 3,333 · 0.69%</div></div>
+      <div class="panel spot-card"><span class="bracket-bl"></span><span class="bracket-br"></span>
+      <div class="layer">Clothing</div><div class="value">Flowing Wave</div><div class="pct">14 / 3,333 · 0.42%</div></div>
+      <div class="panel spot-card"><span class="bracket-bl"></span><span class="bracket-br"></span>
+      <div class="layer">Background</div><div class="value">Rainbow Glitch</div><div class="pct">19 / 3,333 · 0.57%</div></div>
+      
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="brand"><span class="node"></span>HYPE TRADOORS</div>
+    <div class="footer-links">
+      <a href="gallery.html">Gallery</a>
+      <a href="reveal.html">Reveal</a>
+      <a href="rarity.html">Rarity</a>
+      <a href="docs.html">Docs</a>
+      <a href="https://x.com/HypeTradoors" target="_blank" rel="noopener">X</a>
+    </div>
+    <div class="footer-note">HYPE TRADOORS &middot; HYPEREVM &middot; UNIT COUNT: 3333</div>
+  </div>
+</footer>
+</body>
+</html>

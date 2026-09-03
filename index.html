@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hype Tradoors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0B0D;
+  --bg-alt:#101216;
+  --bg-panel:#131519;
+  --bg-panel2:#16191E;
+  --mint:#97FCE4;
+  --mint-dim:#5FBDA8;
+  --amber:#FFB020;
+  --chrome:#B8C2C9;
+  --foam:#F5FEFD;
+  --line:rgba(184,194,201,0.14);
+  --line-bright:rgba(151,252,228,0.28);
+  --muted:rgba(245,254,253,0.5);
+  --red:#FF5A5A;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(151,252,228,0.05), transparent),
+    radial-gradient(ellipse 700px 400px at 90% 10%, rgba(255,176,32,0.04), transparent),
+    var(--bg);
+  color:var(--foam);
+  font-family:'Inter',sans-serif;
+  line-height:1.65;
+  font-size:15px;
+}
+h1,h2,h3{ font-family:'Big Shoulders',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:0.01em; line-height:0.98; }
+a{ color:inherit; text-decoration:none; }
+.mono{ font-family:'JetBrains Mono',monospace; }
+.wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+
+/* ---- circuit trace backdrop (subtle, robotic, NOT chart panels) ---- */
+.circuit-bg{
+  position:fixed; inset:0; z-index:-1; opacity:0.35; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(184,194,201,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,194,201,0.05) 1px, transparent 1px);
+  background-size:42px 42px;
+}
+
+/* ---- ticker ---- */
+.ticker-bar{ background:var(--bg-alt); border-bottom:1px solid var(--line); overflow:hidden; white-space:nowrap; padding:9px 0; }
+.ticker-track{ display:inline-block; padding-left:100%; animation:ticker 30s linear infinite; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.1em; color:var(--amber); font-weight:600; }
+.ticker-track span{ margin:0 20px; color:var(--muted); }
+.ticker-track span.hl{ color:var(--mint); }
+@keyframes ticker{ 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
+
+/* ---- nav ---- */
+nav{ position:sticky; top:0; z-index:50; background:rgba(10,11,13,0.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--line); }
+.nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:15px 28px; max-width:1180px; margin:0 auto; }
+.brand{ display:flex; align-items:center; gap:11px; font-family:'Big Shoulders',sans-serif; font-weight:800; font-size:20px; letter-spacing:0.01em; text-transform:uppercase; }
+.brand .node{
+  width:20px; height:20px; border:1.5px solid var(--mint); border-radius:4px; position:relative; flex-shrink:0;
+  background:rgba(151,252,228,0.06);
+}
+.brand .node::after{ content:""; position:absolute; inset:5px; background:var(--mint); border-radius:1px; box-shadow:0 0 8px 1px rgba(151,252,228,0.8); }
+.nav-links{ display:flex; gap:26px; font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:0.04em; color:var(--muted); }
+.nav-links a{ position:relative; padding:4px 0; }
+.nav-links a:hover{ color:var(--foam); }
+.nav-links a.active{ color:var(--mint); }
+.nav-links a.active::after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:var(--mint); box-shadow:0 0 6px 1px rgba(151,252,228,0.7); }
+@media (max-width:900px){ .nav-links{ display:none; } }
+
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'JetBrains Mono',monospace; font-weight:600; font-size:12.5px; letter-spacing:0.03em;
+  padding:11px 20px; border-radius:3px; border:1px solid var(--line);
+  cursor:pointer; transition:all .15s ease; text-transform:uppercase;
+}
+.btn-primary{ background:var(--mint); color:var(--bg); border:none; }
+.btn-primary:hover{ box-shadow:0 0 24px rgba(151,252,228,0.4); transform:translateY(-1px); }
+.btn-ghost{ color:var(--foam); border-color:var(--line); }
+.btn-ghost:hover{ border-color:var(--mint); color:var(--mint); }
+.btn-amber{ background:var(--amber); color:var(--bg); border:none; }
+.btn-amber:hover{ box-shadow:0 0 24px rgba(255,176,32,0.4); transform:translateY(-1px); }
+
+/* ---- panel with corner brackets (robotic HUD look) ---- */
+.panel{
+  position:relative;
+  background:linear-gradient(155deg, var(--bg-panel2), var(--bg-panel));
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:28px;
+}
+.panel::before, .panel::after,
+.panel .bracket-br, .panel .bracket-bl{ content:""; position:absolute; width:14px; height:14px; pointer-events:none; }
+.panel::before{ top:-1px; left:-1px; border-top:2px solid var(--mint-dim); border-left:2px solid var(--mint-dim); }
+.panel::after{ top:-1px; right:-1px; border-top:2px solid var(--mint-dim); border-right:2px solid var(--mint-dim); }
+.panel .bracket-bl{ bottom:-1px; left:-1px; border-bottom:2px solid var(--mint-dim); border-left:2px solid var(--mint-dim); }
+.panel .bracket-br{ bottom:-1px; right:-1px; border-bottom:2px solid var(--mint-dim); border-right:2px solid var(--mint-dim); }
+
+/* ---- status pill ---- */
+.status-pill{
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700;
+  color:var(--amber); border:1px solid rgba(255,176,32,0.35);
+  padding:8px 16px; border-radius:3px;
+}
+.status-pill .pulse{ width:6px; height:6px; border-radius:50%; background:var(--amber); box-shadow:0 0 7px 2px rgba(255,176,32,0.8); animation:blink 1.4s steps(1) infinite; }
+.status-pill.live{ color:var(--mint); border-color:var(--line-bright); }
+.status-pill.live .pulse{ background:var(--mint); box-shadow:0 0 7px 2px rgba(151,252,228,0.8); }
+@keyframes blink{ 0%,49%{opacity:1;} 50%,100%{opacity:0.25;} }
+
+/* ---- FAQ accordion, robotic style ---- */
+.faq-item{ border:1px solid var(--line); border-radius:4px; margin-bottom:10px; overflow:hidden; background:var(--bg-panel); }
+.faq-item summary{
+  list-style:none; cursor:pointer; padding:18px 22px;
+  display:flex; justify-content:space-between; align-items:center;
+  font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:600;
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{ content:"+"; color:var(--mint); font-size:18px; transition:transform .2s ease; }
+.faq-item[open] summary::after{ transform:rotate(45deg); }
+.faq-item .faq-body{ padding:0 22px 20px; color:var(--muted); font-size:14px; line-height:1.7; }
+
+/* ---- footer ---- */
+footer{ padding:40px 28px; border-top:1px solid var(--line); }
+.footer-inner{ max-width:1180px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+.footer-links{ display:flex; gap:22px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted); }
+.footer-links a:hover{ color:var(--foam); }
+.footer-note{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); }
+
+.hero{ padding:100px 28px 80px; text-align:center; position:relative; }
+.hero h1{ font-size:clamp(48px,8vw,96px); margin-bottom:26px; }
+.hero h1 .accent{ color:var(--mint); }
+.hero-sub{ max-width:560px; margin:0 auto 40px; color:var(--muted); font-size:16px; }
+.hero-ctas{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:70px; }
+
+.stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden; }
+.stat{ background:var(--bg-panel); padding:28px 18px; text-align:center; }
+.stat .num{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:32px; color:var(--mint); }
+.stat .lbl{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.08em; color:var(--muted); text-transform:uppercase; margin-top:8px; }
+@media (max-width:700px){ .stats{ grid-template-columns:repeat(2,1fr); } }
+
+section{ padding:88px 28px; border-top:1px solid var(--line); }
+.section-head{ max-width:620px; margin:0 auto 50px; text-align:center; }
+.kicker{ font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.14em; color:var(--amber); text-transform:uppercase; font-weight:600; margin-bottom:16px; display:block; }
+.section-head h2{ font-size:clamp(30px,4.5vw,46px); margin-bottom:16px; }
+.section-head p{ color:var(--muted); font-size:15px; }
+
+.desk-grid{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:50px; align-items:center; max-width:1080px; margin:0 auto; }
+.desk-grid img{ width:100%; border-radius:4px; border:1px solid var(--line); }
+.desk-copy p{ color:var(--muted); margin-bottom:16px; font-size:15px; }
+.desk-copy strong{ color:var(--foam); font-family:'JetBrains Mono',monospace; font-weight:600; }
+@media (max-width:800px){ .desk-grid{ grid-template-columns:1fr; } }
+
+.tier-row{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; max-width:1080px; margin:0 auto; }
+.tier-card{ background:var(--bg-panel); border:1px solid var(--line); border-radius:4px; padding:24px 14px; text-align:center; }
+.tier-card .n{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:26px; }
+.tier-card .t{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:6px; }
+.tier-mythic .n{ color:var(--amber); }
+.tier-legendary .n{ color:var(--mint); }
+.tier-epic .n{ color:#8FB8FF; }
+.tier-rare .n{ color:#8FE0B8; }
+.tier-common .n{ color:var(--muted); }
+@media (max-width:800px){ .tier-row{ grid-template-columns:repeat(2,1fr); } }
+
+.road-list{ max-width:760px; margin:0 auto; }
+.road-item{ display:flex; gap:20px; padding:22px 0; border-bottom:1px solid var(--line); }
+.road-item:last-child{ border-bottom:none; }
+.road-status{ flex-shrink:0; width:120px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; font-weight:700; padding-top:3px; }
+.status-live{ color:var(--mint); }
+.status-progress{ color:var(--amber); }
+.status-planned{ color:var(--muted); }
+.road-body h3{ font-family:'Inter',sans-serif; font-size:16px; text-transform:none; font-weight:700; margin-bottom:6px; letter-spacing:0; }
+.road-body p{ color:var(--muted); font-size:14px; }
+</style>
+</head>
+<body>
+<div class="circuit-bg"></div>
+<div class="ticker-bar"><div class="ticker-track"><span class="hl">MINTING LIVE</span><span>MINT NOW ON OPENSEA</span><span class="hl">HYPEREVM</span><span>6% SECONDARY ROYALTY</span><span class="hl">$TRADOORS</span><span>14 MYTHIC &middot; 63 LEGENDARY &middot; 247 EPIC</span><span class="hl">MINTING LIVE</span><span>MINT NOW ON OPENSEA</span><span class="hl">HYPEREVM</span><span>6% SECONDARY ROYALTY</span><span class="hl">$TRADOORS</span><span>14 MYTHIC &middot; 63 LEGENDARY &middot; 247 EPIC</span></div></div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="brand"><span class="node"></span>HYPE TRADOORS</a>
+    <div class="nav-links">
+      <a href="index.html" class="active">HOME</a>
+      <a href="gallery.html" class="">GALLERY</a>
+      <a href="reveal.html" class="">REVEAL</a>
+      <a href="rarity.html" class="">RARITY</a>
+      <a href="docs.html" class="">DOCS</a>
+      <a href="staking.html" class="">STAKING</a>
+      
+    </div>
+    <a class="btn btn-primary" href="https://opensea.io/collection/hypetradoors/overview" target="_blank" rel="noopener">Mint Now</a>
+  </div>
+</nav>
+
+<section class="hero" style="border-top:none;">
+  <div class="status-pill live" style="margin-bottom:30px;"><span class="pulse"></span>MINTING LIVE NOW</div>
+  <h1>3,333 TRADERS.<br>ONE <span class="accent">DESK</span> EACH.</h1>
+  <p class="hero-sub">Every Tradoor sat down, switched on his monitors, and hasn't left since. Eight trait layers, zero duplicates, verified on HyperEVM.</p>
+  <div class="hero-ctas">
+    <a class="btn btn-primary" href="https://opensea.io/collection/hypetradoors/overview" target="_blank" rel="noopener">Mint Now</a>
+    <a class="btn btn-amber" href="reveal.html">Check Your Reveal</a>
+    <a class="btn btn-ghost" href="gallery.html">Browse Gallery</a>
+  </div>
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><div class="num">3,333</div><div class="lbl">Supply</div></div>
+      <div class="stat"><div class="num">8</div><div class="lbl">Trait Layers</div></div>
+      <div class="stat"><div class="num">14</div><div class="lbl">Mythic Units</div></div>
+      <div class="stat"><div class="num">6%</div><div class="lbl">Secondary Royalty</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <span class="kicker">The Concept</span>
+    <h2>He's Not Posing. He's Working.</h2>
+    <p>Every Hype Tradoor is built the same way underneath. A unit at a desk, two screens up, hands on the keyboard. What's on his screen isn't decoration. It's dealt.</p>
+  </div>
+  <div class="desk-grid wrap">
+    <img src="images/0.gif" alt="Hype Tradoor unit">
+    <div class="desk-copy">
+      <p>Whatever happens to his desk, the mood on his screens, the way he's dressed, the room behind him, that's his read on the market, rendered permanently into the unit the moment you mint it.</p>
+      <p><strong>EIGHT INDEPENDENT LAYERS</strong> roll for every single Tradoor: Headwear, Eyes, Eyewear, Clothing, Background, Left Screen, Right Screen, Mouse Colour.</p>
+      <p>Every one of the 3,333 combinations was checked, programmatically, against every other one. <strong>ZERO DUPLICATES. ZERO COLLISIONS.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <span class="kicker">Rarity</span>
+    <h2>The Tiers, Honestly</h2>
+    <p>No clean, predictable split. The tiers landed where the actual trait math put them.</p>
+  </div>
+  <div class="tier-row">
+    <div class="tier-card tier-mythic"><div class="n">14</div><div class="t">Mythic</div></div>
+    <div class="tier-card tier-legendary"><div class="n">63</div><div class="t">Legendary</div></div>
+    <div class="tier-card tier-epic"><div class="n">247</div><div class="t">Epic</div></div>
+    <div class="tier-card tier-rare"><div class="n">576</div><div class="t">Rare</div></div>
+    <div class="tier-card tier-common"><div class="n">2,433</div><div class="t">Common</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <span class="kicker">Where Things Stand</span>
+    <h2>Built, Live, And What's Next</h2>
+    <p>No promises dressed up as facts. Exactly what's live today, and what's still being built.</p>
+  </div>
+  <div class="road-list">
+    <div class="road-item"><div class="road-status status-live">Live</div><div class="road-body"><h3>Mint &amp; Reveal</h3><p>Minting is live now on OpenSea. Reveal is instant, check any Tradoor on the Reveal page the moment you mint.</p></div></div>
+    <div class="road-item"><div class="road-status status-live">Live</div><div class="road-body"><h3>6% Secondary Royalty</h3><p>Live on-chain the moment trading opens. Funds the project treasury.</p></div></div>
+    <div class="road-item"><div class="road-status status-progress">In Documentation</div><div class="road-body"><h3>$TRADOORS Staking</h3><p>Planned to earn a share of royalty and $TRADOORS fees, weighted by rarity. Not deployed yet. See the Staking page.</p></div></div>
+    <div class="road-item"><div class="road-status status-planned">Planned</div><div class="road-body"><h3>Real Market Exposure</h3><p>Long-term ambition for payouts to reflect real market assets. Direction, not delivery, until stated otherwise here.</p></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="brand"><span class="node"></span>HYPE TRADOORS</div>
+    <div class="footer-links">
+      <a href="gallery.html">Gallery</a>
+      <a href="reveal.html">Reveal</a>
+      <a href="rarity.html">Rarity</a>
+      <a href="docs.html">Docs</a>
+      <a href="https://x.com/HypeTradoors" target="_blank" rel="noopener">X</a>
+    </div>
+    <div class="footer-note">HYPE TRADOORS &middot; HYPEREVM &middot; UNIT COUNT: 3333</div>
+  </div>
+</footer>
+</body>
+</html>
